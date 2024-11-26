@@ -2,12 +2,12 @@ import React, { useState, useEffect } from "react";
 import { Text, View, StyleSheet, Button } from "react-native";
 import { CameraView, Camera } from "expo-camera";
 import { router } from "expo-router";
+import Title from "@/components/Title";
 
 export interface dataGtinProps {
   data: any;
 }
 export default function ScanScreen() {
-  
   const [hasPermission, setHasPermission] = useState<boolean | null>(null);
   const [scanned, setScanned] = useState(false);
   const [data, setData] = useState<string>("");
@@ -35,7 +35,9 @@ export default function ScanScreen() {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.textTitle}>FRAPE</Text>
+      <View style={{ marginTop: 40 }}>
+        <Title />
+      </View>
       <View style={styles.containerScan}>
         <CameraView
           onBarcodeScanned={scanned ? undefined : handleBarcodeScanned}
@@ -48,12 +50,24 @@ export default function ScanScreen() {
           <Button
             title={"Tap to Scan Again"}
             onPress={() => setScanned(false)}
-            color={"#fff"}
+            color={"#000"}
           />
         )}
         <View style={styles.scanOverlay}>
           <Text style={styles.scanText}></Text>
         </View>
+      </View>
+      <View
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          height: "30%",
+        }}
+      >
+        <Text style={{ fontSize: 20, lineHeight: 30, color: "#666" }}>
+          Scan the ean/gtin of the product to be redirect to the details section
+        </Text>
       </View>
     </View>
   );

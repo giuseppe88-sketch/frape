@@ -17,6 +17,8 @@ import SimpleLineIcons from "@expo/vector-icons/SimpleLineIcons";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import Fontisto from "@expo/vector-icons/Fontisto";
 import Entypo from "@expo/vector-icons/Entypo";
+import FAOInput from "@/components/FAOInput";
+import { Provider as PaperProvider } from "react-native-paper";
 
 interface ProductInfo {
   title: string;
@@ -40,7 +42,9 @@ interface ProductInfo {
     fiber: string;
     proteins: string;
   };
+  ecoscore_data: any;
   nutriscore: any;
+  agribalyse: any;
   warning: string;
   labels: string;
   manufacturing_places: string;
@@ -59,13 +63,35 @@ export default function ProductInfoScreen() {
   >(null);
   const [loading, setLoading] = React.useState(true);
   const [error, setError] = React.useState<string | null>(null);
+  const [isLoadingFao, setIsLoadingFao] = React.useState(false);
+  const [faoResult, setFaoResult] = React.useState(null);
+  function mapEcoScores(data: any) {
+    let ecoscoreData = Object.entries(
+      data.ecoscore_data.adjustments.origins_of_ingredients
+    );
+    const epiScoreEntry = ecoscoreData.find(
+      (entry) => entry[0] === "epi_score"
+    );
+    if (epiScoreEntry) {
+      return `${epiScoreEntry[1]}/100`;
+    } else {
+      return "No EPI score found.";
+    }
+  }
+  function mapEcoValue(data: any) {
+    let ecoscoreData = Object.entries(
+      data.ecoscore_data.adjustments.origins_of_ingredients
+    );
+    const epiScoreEntry = ecoscoreData.find(
+      (entry) => entry[0] === "epi_value"
+    );
+    if (epiScoreEntry) {
+      return `${epiScoreEntry[1]}/100`;
+    } else {
+      return "No EPI value found.";
+    }
+  }
 
-  // // Sample static product data
-  // const saveProductInfoToFile = async (data:any) => {
-  //   const path = `${RNFS.DocumentDirectoryPath}/mockData.json`;
-  //   await RNFS.writeFile(path, JSON.stringify(data), 'utf8');
-  //   console.log(`Data saved to ${path}`);
-  // };
   React.useEffect(() => {
     setLoading(true);
     const getProductInfo = async () => {
@@ -75,8 +101,7 @@ export default function ProductInfoScreen() {
           fetchProductOpenFoodInfo(gtin as string),
         ]);
         setDataProduct(openFoodData);
-        // saveProductInfoToFile(openFoodData)
-        alert(JSON.stringify(openFoodData));
+        // saveDataToLocalFile(openFoodData)
       } catch (err: any) {
         setError(err.message);
       } finally {
@@ -115,6 +140,54 @@ export default function ProductInfoScreen() {
         return null; // or a default placeholder image
     }
   };
+
+  // const BASE_URL = "http://localhost:5000";
+  const BASE_URL = "http://172.20.10.2:5000/";
+  const fetchData = async (faoDetails: any) => {
+    setIsLoadingFao(true);
+    try {
+      const response = await fetch(`${BASE_URL}fetch-data`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          minDepth: 0.493,
+          maxDepth: 5727.918,
+          minLat: faoDetails.latRange.min,
+          maxLat: faoDetails.latRange.max,
+          minLon: faoDetails.lonRange.min,
+          maxLon: faoDetails.lonRange.max,
+          startDatetime: "2024-01-01T12:00:00",
+          endDatetime: "2024-01-31T12:00:00",
+        }),
+      });
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+
+      const data = await response.json();
+      console.log("Response:", data);
+      setIsLoadingFao(false);
+      setFaoResult(data);
+      return data;
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
+
+  const handleFaoSelect = (selectedFao: any) => {
+    fetchData(selectedFao)
+      .then((data) => {
+        if (data) {
+          console.log("Pollution Events:", data.pollutionEvents);
+        }
+      })
+      .catch((error) => {
+        console.error("Failed to fetch data:", error);
+      });
+  };
+
   const mapNutriScoreIcon = (grade: string) => {
     switch (grade.toLowerCase()) {
       case "a":
@@ -152,8 +225,9 @@ export default function ProductInfoScreen() {
           <Text style={styles.productName}>
             {dataProduct.product_name || "Product Name Not Available"}
           </Text>
-          <Text style={styles.subName}>
-            {dataProduct.generic_name || "No generic name available"}
+          <Text style={styles.details}>
+            {dataProduct.ecoscore_data.agribalyse.name_en ||
+              "No generic name available"}
           </Text>
           <Image
             source={{ uri: dataProduct.image_url }}
@@ -162,14 +236,15 @@ export default function ProductInfoScreen() {
           />
           <View>
             <View style={styles.titleContainer}>
-              <AntDesign name="bank" size={24} color="black" marginBottom={5}/>
+              <AntDesign name="bank" size={24} color="black" marginBottom={5} />
               <Text style={styles.sectionTitle}>Brand</Text>
             </View>
             <Text style={styles.infoText}>
-              {dataProduct.brands || "Brand Not Available"}
+              <Text style={styles.details}>
+                {dataProduct.brands || "Brand Not Available"}
+              </Text>
             </Text>
           </View>
-
           <View>
             <View style={styles.titleContainer}>
               <MaterialIcons
@@ -181,7 +256,10 @@ export default function ProductInfoScreen() {
               <Text style={styles.sectionTitle}>Categories</Text>
             </View>
             <Text style={styles.infoText}>
-              {dataProduct.categories || "Categories Not Available"}
+              <Text style={styles.details}>
+                {" "}
+                {dataProduct.categories || "Categories Not Available"}
+              </Text>
             </Text>
           </View>
           <View>
@@ -195,7 +273,9 @@ export default function ProductInfoScreen() {
               <Text style={styles.sectionTitle}>Ingredients</Text>
             </View>
             <Text style={styles.infoText}>
-              {dataProduct.ingredients_text || "Ingredients not listed"}
+              <Text style={styles.details}>
+                {dataProduct.ingredients_text || "Ingredients not listed"}
+              </Text>
             </Text>
           </View>
           <View>
@@ -206,23 +286,35 @@ export default function ProductInfoScreen() {
                 color="black"
                 marginTop={5}
               />
-              <Text style={styles.sectionTitle}>Nutritional Information</Text>
+              <View style={styles.inlineContainer}>
+                {" "}
+                <Text style={styles.sectionTitle}>Nutritional Information</Text>
+                <Text style={{ marginTop: 5 }}>(per 100gr)</Text>
+              </View>
             </View>
             <Text style={styles.infoText}>
               <Text style={styles.subInfoText}>Energy:</Text>{" "}
-              {dataProduct.nutriments?.energy || "Not Available"} kcal
+              <Text style={styles.details}>
+                {dataProduct.nutriments?.energy || "Not Available"} kcal
+              </Text>
             </Text>
             <Text style={styles.infoText}>
               <Text style={styles.subInfoText}>Fat:</Text>{" "}
-              {dataProduct.nutriments?.fat || "Not Available"} g
+              <Text style={styles.details}>
+                {dataProduct.nutriments?.fat || "Not Available"} g
+              </Text>
             </Text>
             <Text style={styles.infoText}>
               <Text style={styles.subInfoText}>Sugars:</Text>{" "}
-              {dataProduct.nutriments?.sugars || "Not Available"} g
+              <Text style={styles.details}>
+                {dataProduct.nutriments?.sugars || "Not Available"} g
+              </Text>
             </Text>
             <Text style={styles.infoText}>
               <Text style={styles.subInfoText}>Proteins:</Text>{" "}
-              {dataProduct.nutriments?.proteins || "Not Available"} g
+              <Text style={styles.details}>
+                {dataProduct.nutriments?.proteins || "Not Available"} g
+              </Text>
             </Text>
           </View>
           <View>
@@ -236,12 +328,24 @@ export default function ProductInfoScreen() {
               <Text style={styles.sectionTitle}>Environmental Information</Text>
             </View>
             <Text style={styles.infoText}>
-              <Text style={styles.subInfoText}>Packaging: </Text>
-              {dataProduct.packaging || "Packaging Information Not Available"}
+              <Text style={styles.subInfoText}>Packaging:</Text>
+              <Text style={styles.details}>
+                {dataProduct.packaging || "Packaging Information Not Available"}
+              </Text>
             </Text>
             <Text style={styles.infoText}>
               <Text style={styles.subInfoText}>Labels:</Text>{" "}
-              {dataProduct.labels || "No environmental labels"}
+              <Text style={styles.details}>
+                {dataProduct.labels || "No environmental labels"}
+              </Text>
+            </Text>{" "}
+            <Text style={styles.infoText}>
+              <Text style={styles.subInfoText}>Environmental Score:{""}</Text>
+              <Text style={styles.details}>{mapEcoScores(dataProduct)}</Text>
+            </Text>
+            <Text style={styles.infoText}>
+              <Text style={styles.subInfoText}>Environmental Value:{""}</Text>
+              <Text style={styles.details}>{mapEcoValue(dataProduct)}</Text>
             </Text>
           </View>
           <View>
@@ -250,22 +354,20 @@ export default function ProductInfoScreen() {
               <Text style={styles.sectionTitle}>Origin</Text>
             </View>
             <Text style={styles.infoText}>
-              <Text style={styles.subInfoText}>Manufacturing place: </Text>
-              {dataProduct.manufacturing_places || "Not specified"}
+              <Text style={styles.subInfoText}>Manufacturing place:</Text>
+              <Text style={styles.details}>
+                {dataProduct.manufacturing_places || "Not specified"}
+              </Text>
             </Text>
             <Text style={styles.infoText}>
               <Text style={styles.subInfoText}>Source:</Text>
             </Text>
-            <Text style={styles.infoText}>
-              <Text style={styles.subInfoText}>Catch Location:</Text>
-            </Text>
-            <Text style={styles.infoText}>
-              <Text style={styles.subInfoText}>Fishing Method:</Text>
-            </Text>
 
             <Text style={styles.infoText}>
               <Text style={styles.subInfoText}>Countries where sold:</Text>{" "}
-              {dataProduct.countries || "Not Available"}
+              <Text style={styles.details}>
+                {dataProduct.countries || "Not Available"}
+              </Text>
             </Text>
           </View>
           <View>
@@ -287,34 +389,43 @@ export default function ProductInfoScreen() {
                 color="black"
                 marginTop={5}
               />
-              <Text style={styles.sectionTitle}>Product Info</Text>
+              <Text style={styles.sectionTitle}>Product Info & Pollution</Text>
             </View>
             <Text style={styles.infoText}>
-              <Text style={styles.subInfoText}>Species: </Text>
+              <Text style={styles.subInfoText}>Species:</Text>
             </Text>
             <Text style={styles.infoText}>
               <Text style={styles.subInfoText}>
                 Warning: {dataProduct.warning}
               </Text>
+            </Text>{" "}
+            <Text style={styles.infoText}>
+              <Text style={styles.subInfoText}>Catch Location:</Text>
             </Text>
+            <Text style={styles.infoText}>
+              <Text style={styles.subInfoText}>Fishing Method:</Text>
+            </Text>{" "}
+            <Text style={styles.infoText}>
+              <Text style={styles.subInfoText}>
+                Pollution Level:{""}{" "}
+                {isLoadingFao ? (
+                  <ActivityIndicator
+                    size="small"
+                    color={"green"}
+                    style={styles.loadingIndicatorFao}
+                  />
+                ) : (
+                  faoResult?.pollutionEvents
+                )}
+              </Text>
+            </Text>
+            <Text style={styles.infoText}>
+              <Text style={styles.subInfoText}>Water Quality:{""}</Text>
+            </Text>
+            <PaperProvider>
+              <FAOInput onFaoSelect={handleFaoSelect} />
+            </PaperProvider>
           </View>
-          <View>
-            <View style={styles.titleContainer}>
-              <MaterialIcons name="eco" size={24} color="black" marginTop={5} />
-              <Text style={styles.sectionTitle}>Sustainability</Text>
-            </View>
-
-            <Text style={styles.infoText}>
-              <Text style={styles.subInfoText}>Environmental Impact: {""}</Text>
-            </Text>
-            <Text style={styles.infoText}>
-              <Text style={styles.subInfoText}>Pollution Level: {""}</Text>
-            </Text>
-            <Text style={styles.infoText}>
-              <Text style={styles.subInfoText}>Water Quality: {""}</Text>
-            </Text>
-          </View>
-
           <NutrimentsComponent data={dataProduct?.nutriments} />
         </View>
       ) : (
@@ -339,8 +450,8 @@ const styles = StyleSheet.create({
   image: {
     width: 150,
     height: 150,
-    marginTop:10,
-    marginBottom:10
+    marginTop: 10,
+    marginBottom: 10,
   },
   infoContainer: {
     padding: 20,
@@ -352,7 +463,7 @@ const styles = StyleSheet.create({
     marginBottom: 5,
     marginTop: 45,
   },
-  subName: {
+  details: {
     fontSize: 18,
     color: "#666",
   },
@@ -370,7 +481,7 @@ const styles = StyleSheet.create({
     marginLeft: 5,
     marginRight: 15,
   },
-  sectionFirstTitle:{
+  sectionFirstTitle: {
     fontSize: 20,
     fontWeight: "bold",
     marginBottom: 10,
@@ -396,4 +507,17 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
   },
+  inlineContainer: {
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  loadingIndicatorFao:{
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    marginLeft: 30,
+    marginTop:20
+  }
 });

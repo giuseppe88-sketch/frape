@@ -5,10 +5,12 @@
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
+    "sdkVersion": "52.0.0",
     "scheme": "myapp",
+    "newArchEnabled": true,
     "userInterfaceStyle": "automatic",
     "splash": {
-      "image": "./assets/images/splash.png",
+      "image": "./assets/images/icon.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
@@ -17,9 +19,17 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/images/adaptive-icon.png",
-        "backgroundColor": "#ffffff"
-      }
+        "foregroundImage": "./assets/images/icon.png",
+        "backgroundColor": "#ffffff",
+        "newArchEnabled": true
+      },
+      "permissions": [
+        "android.permission.CAMERA",
+        "android.permission.RECORD_AUDIO",
+        "android.permission.CAMERA",
+        "android.permission.RECORD_AUDIO"
+      ],
+      "package": "com.anonymous.frape"
     },
     "web": {
       "bundler": "metro",
@@ -34,7 +44,8 @@
           "cameraPermission": "Allow $(PRODUCT_NAME) to access your camera.",
           "microphonePermission": "Allow $(PRODUCT_NAME) to access your microphone"
         }
-      ]
+      ],
+      "expo-font"
     ],
     "experiments": {
       "typedRoutes": true
