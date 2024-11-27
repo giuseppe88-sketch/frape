@@ -141,10 +141,12 @@ export default function ProductInfoScreen() {
     }
   };
 
-  // const BASE_URL = "http://localhost:5000";
-  const BASE_URL = "http://172.20.10.2:5000/";
+  const BASE_URL =
+    "https://f193-2a00-20-6080-ebcc-35df-cf64-406b-f117.ngrok-free.app/";
+  // const BASE_URL = "http://172.20.10.2:5000/";
   const fetchData = async (faoDetails: any) => {
     setIsLoadingFao(true);
+    console.log("trigger fetching data...");
     try {
       const response = await fetch(`${BASE_URL}fetch-data`, {
         method: "POST",
@@ -160,6 +162,7 @@ export default function ProductInfoScreen() {
           maxLon: faoDetails.lonRange.max,
           startDatetime: "2024-01-01T12:00:00",
           endDatetime: "2024-01-31T12:00:00",
+          output_filename: faoDetails.nameDataFile,
         }),
       });
       if (!response.ok) {
@@ -513,11 +516,11 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
   },
-  loadingIndicatorFao:{
+  loadingIndicatorFao: {
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
     marginLeft: 30,
-    marginTop:20
-  }
+    marginTop: 20,
+  },
 });
