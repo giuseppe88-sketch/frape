@@ -32,6 +32,7 @@ interface ProductInfo {
   quantity: string;
   packaging: string;
   image_url: string;
+  categories_tags: string;
   nutriments: {
     energy: string;
     fat: string;
@@ -53,18 +54,29 @@ interface ProductInfo {
   // Add any other fields you're interested in
 }
 
+export interface faoResultProps {
+  pollutionEvents: number;
+}
+
+const today = new Date();
+const startDate = new Date(today);
+startDate.setMonth(today.getMonth() - 3); // Subtract 3 months from today
+
+// Format dates as ISO strings in the required format
+const formattedStartDate = startDate.toISOString().slice(0, 19); // "YYYY-MM-DDTHH:MM:SS"
+const formattedEndDate = today.toISOString().slice(0, 19); // "YYYY-MM-DDTHH:MM:SS"
+
 export default function ProductInfoScreen() {
   const { gtin } = useLocalSearchParams(); // Retrieve gtin from route parameters
   const [dataProduct, setDataProduct] = React.useState<ProductInfo | null>(
     null
   );
-  const [productOpenFoodInfo, setProductOpenFoodInfo] = React.useState<
-    any | null
-  >(null);
-  const [loading, setLoading] = React.useState(true);
+  const [loading, setLoading] = React.useState<boolean | null>(null);
   const [error, setError] = React.useState<string | null>(null);
-  const [isLoadingFao, setIsLoadingFao] = React.useState(false);
-  const [faoResult, setFaoResult] = React.useState(null);
+  const [isLoadingFao, setIsLoadingFao] = React.useState<boolean>(false);
+  const [faoResult, setFaoResult] = React.useState<faoResultProps | null>(null);
+  const [catchLocation, setCatchLocation] = React.useState<string>("");
+
   function mapEcoScores(data: any) {
     let ecoscoreData = Object.entries(
       data.ecoscore_data.adjustments.origins_of_ingredients
@@ -92,9 +104,41 @@ export default function ProductInfoScreen() {
     }
   }
 
+  const mapWaterQuality = React.useCallback(
+    (inputResultPollution: any) => {
+      if (inputResultPollution == null) return "";
+
+      let pollutionQuality: string;
+
+      if (inputResultPollution >= 0 && inputResultPollution <= 50) {
+        pollutionQuality = "Low";
+      } else if (inputResultPollution > 50 && inputResultPollution <= 200) {
+        pollutionQuality = "Moderate";
+      } else if (inputResultPollution > 200) {
+        pollutionQuality = "High";
+      } else if (isLoadingFao) {
+        pollutionQuality = "Loading";
+      } else {
+        pollutionQuality = ""; // Fallback case
+      }
+
+      switch (pollutionQuality) {
+        case "High":
+          return <Text style={styles.details}>BAD</Text>;
+        case "Moderate":
+          return <Text style={styles.details}>MODERATE</Text>;
+        case "Low":
+          return <Text style={styles.details}>GOOD</Text>;
+        default:
+          return <Text style={styles.details}>UNKNOWN</Text>;
+      }
+    },
+    [faoResult]
+  );
+
   React.useEffect(() => {
-    setLoading(true);
     const getProductInfo = async () => {
+      setLoading(true);
       try {
         // Make both API calls in parallel
         const [openFoodData] = await Promise.all([
@@ -109,12 +153,12 @@ export default function ProductInfoScreen() {
       }
     };
 
-    if (gtin) {
+    if (gtin !== undefined) {
       getProductInfo();
     }
   }, [gtin]);
 
-  if (loading) {
+  if (loading === true) {
     return (
       <ActivityIndicator
         size="large"
@@ -142,11 +186,11 @@ export default function ProductInfoScreen() {
   };
 
   const BASE_URL =
-    "https://f193-2a00-20-6080-ebcc-35df-cf64-406b-f117.ngrok-free.app/";
+    "https://6af9-2a00-20-604e-2f8a-e9e1-b03f-95c5-22b6.ngrok-free.app/";
   // const BASE_URL = "http://172.20.10.2:5000/";
   const fetchData = async (faoDetails: any) => {
     setIsLoadingFao(true);
-    console.log("trigger fetching data...");
+    setCatchLocation(faoDetails.location);
     try {
       const response = await fetch(`${BASE_URL}fetch-data`, {
         method: "POST",
@@ -160,8 +204,8 @@ export default function ProductInfoScreen() {
           maxLat: faoDetails.latRange.max,
           minLon: faoDetails.lonRange.min,
           maxLon: faoDetails.lonRange.max,
-          startDatetime: "2024-01-01T12:00:00",
-          endDatetime: "2024-01-31T12:00:00",
+          startDatetime: formattedStartDate, // Use dynamically calculated start date
+          endDatetime: formattedEndDate, // Use today's date for end date
           output_filename: faoDetails.nameDataFile,
         }),
       });
@@ -220,6 +264,12 @@ export default function ProductInfoScreen() {
   // if (error) {
   //   return <Text style={styles.errorText}>Error: {error}</Text>;
   // }
+
+  const isSeafood = (categories: any) => {
+    if (categories && categories.includes("en:seafood")) {
+      return true;
+    } else return false;
+  };
 
   return (
     <ScrollView style={styles.container}>
@@ -363,10 +413,6 @@ export default function ProductInfoScreen() {
               </Text>
             </Text>
             <Text style={styles.infoText}>
-              <Text style={styles.subInfoText}>Source:</Text>
-            </Text>
-
-            <Text style={styles.infoText}>
               <Text style={styles.subInfoText}>Countries where sold:</Text>{" "}
               <Text style={styles.details}>
                 {dataProduct.countries || "Not Available"}
@@ -384,55 +430,82 @@ export default function ProductInfoScreen() {
               />
             </View>
           </View>
-          <View>
-            <View style={styles.titleContainer}>
-              <MaterialCommunityIcons
-                name="information"
-                size={24}
-                color="black"
-                marginTop={5}
-              />
-              <Text style={styles.sectionTitle}>Product Info & Pollution</Text>
+          {isSeafood(dataProduct.categories_tags) && (
+            <View>
+              <Text style={styles.infoTextOptions}>
+                Below, you can select an FAO area to check the pollution levels
+                and water quality for that specific region. While brands and
+                companies are not legally required to indicate the FAO area
+                where the fish was caught, some may include this information on
+                the packaging, often near the label or on the top of cans.
+                Please look for the FAO area mentioned on the product, then
+                choose the corresponding option from the list. We will provide
+                you with the latest available water pollution data for that
+                region directly from copernicus satellite.
+              </Text>
+              <View style={styles.titleContainer}>
+                <MaterialCommunityIcons
+                  name="information"
+                  size={24}
+                  color="black"
+                  marginTop={5}
+                />
+                <Text style={styles.sectionTitle}>
+                  Product Info & Pollution
+                </Text>
+              </View>
+              <Text style={styles.infoText}>
+                <Text style={styles.subInfoText}>
+                  Catch Location:
+                  <Text style={styles.details}>{catchLocation}</Text>
+                </Text>
+              </Text>
+              <Text style={styles.infoText}>
+                <Text style={styles.subInfoText}>Fishing Method:</Text>
+              </Text>{" "}
+              <Text style={styles.infoText}>
+                <Text style={styles.subInfoText}>
+                  Pollution Level:{""}{" "}
+                  {isLoadingFao ? (
+                    <ActivityIndicator
+                      size="small"
+                      color={"green"}
+                      style={styles.loadingIndicatorFao}
+                    />
+                  ) : (
+                    <Text style={styles.details}>
+                      {" "}
+                      {faoResult?.pollutionEvents}
+                    </Text>
+                  )}
+                </Text>
+              </Text>
+              <Text style={styles.infoText}>
+                <Text style={styles.subInfoText}>
+                  Water Quality:
+                  {isLoadingFao ? (
+                    <ActivityIndicator
+                      size="small"
+                      color={"green"}
+                      style={styles.loadingIndicatorFao}
+                    />
+                  ) : (
+                    mapWaterQuality(faoResult?.pollutionEvents)
+                  )}
+                  {""}
+                </Text>
+              </Text>
+              <PaperProvider>
+                <FAOInput onFaoSelect={handleFaoSelect} />
+              </PaperProvider>
             </View>
-            <Text style={styles.infoText}>
-              <Text style={styles.subInfoText}>Species:</Text>
-            </Text>
-            <Text style={styles.infoText}>
-              <Text style={styles.subInfoText}>
-                Warning: {dataProduct.warning}
-              </Text>
-            </Text>{" "}
-            <Text style={styles.infoText}>
-              <Text style={styles.subInfoText}>Catch Location:</Text>
-            </Text>
-            <Text style={styles.infoText}>
-              <Text style={styles.subInfoText}>Fishing Method:</Text>
-            </Text>{" "}
-            <Text style={styles.infoText}>
-              <Text style={styles.subInfoText}>
-                Pollution Level:{""}{" "}
-                {isLoadingFao ? (
-                  <ActivityIndicator
-                    size="small"
-                    color={"green"}
-                    style={styles.loadingIndicatorFao}
-                  />
-                ) : (
-                  faoResult?.pollutionEvents
-                )}
-              </Text>
-            </Text>
-            <Text style={styles.infoText}>
-              <Text style={styles.subInfoText}>Water Quality:{""}</Text>
-            </Text>
-            <PaperProvider>
-              <FAOInput onFaoSelect={handleFaoSelect} />
-            </PaperProvider>
-          </View>
+          )}
           <NutrimentsComponent data={dataProduct?.nutriments} />
         </View>
       ) : (
-        <Text style={styles.noProduct}>No product data found.</Text>
+        <Text style={styles.noProduct}>
+          Scan the barcode on the product first.
+        </Text>
       )}
     </ScrollView>
   );
@@ -500,10 +573,12 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
   noProduct: {
+    margin: 20,
     textAlign: "center",
     marginTop: 100,
     fontSize: 18,
     fontWeight: "bold",
+    color: "#666",
   },
   titleContainer: {
     display: "flex",
@@ -522,5 +597,9 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginLeft: 30,
     marginTop: 20,
+  },
+  infoTextOptions: {
+    margin: 5,
+    fontSize: 9,
   },
 });
