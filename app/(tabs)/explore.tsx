@@ -6,7 +6,10 @@ import {
   ScrollView,
   ActivityIndicator,
   Image,
+  Button,
 } from "react-native";
+import { useNavigation } from "@react-navigation/native";
+
 import { useLocalSearchParams } from "expo-router";
 import { fetchProductOpenFoodInfo } from "../../api/productApi";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
@@ -67,6 +70,8 @@ const formattedStartDate = startDate.toISOString().slice(0, 19); // "YYYY-MM-DDT
 const formattedEndDate = today.toISOString().slice(0, 19); // "YYYY-MM-DDTHH:MM:SS"
 
 export default function ProductInfoScreen() {
+  const navigation = useNavigation();
+
   const { gtin } = useLocalSearchParams(); // Retrieve gtin from route parameters
   const [dataProduct, setDataProduct] = React.useState<ProductInfo | null>(
     null
@@ -381,7 +386,7 @@ export default function ProductInfoScreen() {
               <Text style={styles.sectionTitle}>Environmental Information</Text>
             </View>
             <Text style={styles.infoText}>
-              <Text style={styles.subInfoText}>Packaging:</Text>
+              <Text style={styles.subInfoText}>Packaging:</Text>{" "}
               <Text style={styles.details}>
                 {dataProduct.packaging || "Packaging Information Not Available"}
               </Text>
@@ -393,11 +398,11 @@ export default function ProductInfoScreen() {
               </Text>
             </Text>{" "}
             <Text style={styles.infoText}>
-              <Text style={styles.subInfoText}>Environmental Score:{""}</Text>
+              <Text style={styles.subInfoText}>Environmental Score:</Text>{" "}
               <Text style={styles.details}>{mapEcoScores(dataProduct)}</Text>
             </Text>
             <Text style={styles.infoText}>
-              <Text style={styles.subInfoText}>Environmental Value:{""}</Text>
+              <Text style={styles.subInfoText}>Environmental Value:</Text>{" "}
               <Text style={styles.details}>{mapEcoValue(dataProduct)}</Text>
             </Text>
           </View>
@@ -407,7 +412,7 @@ export default function ProductInfoScreen() {
               <Text style={styles.sectionTitle}>Origin</Text>
             </View>
             <Text style={styles.infoText}>
-              <Text style={styles.subInfoText}>Manufacturing place:</Text>
+              <Text style={styles.subInfoText}>Manufacturing place:</Text>{" "}
               <Text style={styles.details}>
                 {dataProduct.manufacturing_places || "Not specified"}
               </Text>
@@ -455,17 +460,18 @@ export default function ProductInfoScreen() {
                 </Text>
               </View>
               <Text style={styles.infoText}>
-                <Text style={styles.subInfoText}>
-                  Catch Location:
-                  <Text style={styles.details}>{catchLocation}</Text>
-                </Text>
+                <Text style={styles.subInfoText}>Catch Location:</Text>{" "}
+                <Text style={styles.details}>{catchLocation}</Text>
               </Text>
               <Text style={styles.infoText}>
                 <Text style={styles.subInfoText}>Fishing Method:</Text>
               </Text>{" "}
               <Text style={styles.infoText}>
                 <Text style={styles.subInfoText}>
-                  Pollution Level:{""}{" "}
+                  Pollution Events{" "}
+                  <Text style={{ fontSize: 8 }}>(exceeding 10 mg/m³)</Text>:
+                </Text>{" "}
+                <Text style={styles.details}>
                   {isLoadingFao ? (
                     <ActivityIndicator
                       size="small"
@@ -474,26 +480,22 @@ export default function ProductInfoScreen() {
                     />
                   ) : (
                     <Text style={styles.details}>
-                      {" "}
                       {faoResult?.pollutionEvents}
                     </Text>
                   )}
                 </Text>
               </Text>
               <Text style={styles.infoText}>
-                <Text style={styles.subInfoText}>
-                  Water Quality:
-                  {isLoadingFao ? (
-                    <ActivityIndicator
-                      size="small"
-                      color={"green"}
-                      style={styles.loadingIndicatorFao}
-                    />
-                  ) : (
-                    mapWaterQuality(faoResult?.pollutionEvents)
-                  )}
-                  {""}
-                </Text>
+                <Text style={styles.subInfoText}>Water Quality:</Text>{" "}
+                {isLoadingFao ? (
+                  <ActivityIndicator
+                    size="small"
+                    color={"green"}
+                    style={styles.loadingIndicatorFao}
+                  />
+                ) : (
+                  mapWaterQuality(faoResult?.pollutionEvents)
+                )}
               </Text>
               <PaperProvider>
                 <FAOInput onFaoSelect={handleFaoSelect} />
