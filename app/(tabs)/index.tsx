@@ -21,8 +21,10 @@ export default function ScanScreen() {
     getCameraPermissions();
   }, []);
 
+  console.log("SCANNED",scanned)
+
   const handleBarcodeScanned = async ({ data }: dataGtinProps) => {
-    setScanned(false);
+    setScanned(true);
     setData(data);
     router.push({ pathname: "/explore", params: { gtin: data } });
   };
