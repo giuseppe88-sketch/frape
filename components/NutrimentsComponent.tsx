@@ -2,97 +2,101 @@ import { StyleSheet, Text, View } from "react-native";
 import React from "react";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 
-interface NutritionDataProps {
-  calcium?: number;
-  calcium_100g?: number;
-  calcium_serving?: number;
-  calcium_unit?: string;
-  calcium_value?: number;
-  carbohydrates?: number;
-  carbohydrates_100g?: number;
-  carbohydrates_serving?: number;
-  carbohydrates_unit?: string;
-  carbohydrates_value?: number;
-  cholesterol?: number;
-  cholesterol_100g?: number;
-  cholesterol_serving?: number;
-  cholesterol_unit?: string;
-  cholesterol_value?: number;
-  energy?: number;
-  "energy-kcal"?: number;
-  "energy-kcal_100g"?: number;
-  "energy-kcal_serving"?: number;
-  "energy-kcal_unit"?: string;
-  "energy-kcal_value"?: number;
-  "energy-kcal_value_computed"?: number;
-  energy_100g?: number;
-  energy_serving?: number;
-  energy_unit?: string;
-  energy_value?: number;
-  fat?: number;
-  fat_100g?: number;
-  fat_serving?: number;
-  fat_unit?: string;
-  fat_value?: number;
-  fiber?: number;
-  fiber_100g?: number;
-  fiber_serving?: number;
-  fiber_unit?: string;
-  fiber_value?: number;
-  "fruits-vegetables-legumes-estimate-from-ingredients_100g"?: number;
-  "fruits-vegetables-legumes-estimate-from-ingredients_serving"?: number;
-  "fruits-vegetables-nuts-estimate-from-ingredients_100g"?: number;
-  "fruits-vegetables-nuts-estimate-from-ingredients_serving"?: number;
-  iron?: number;
-  iron_100g?: number;
-  iron_serving?: number;
-  iron_unit?: string;
-  iron_value?: number;
-  "nova-group"?: number;
-  "nova-group_100g"?: number;
-  "nova-group_serving"?: number;
-  "nutrition-score-fr"?: number;
-  "nutrition-score-fr_100g"?: number;
-  proteins?: number;
-  proteins_100g?: number;
-  proteins_serving?: number;
-  proteins_unit?: string;
-  proteins_value?: number;
-  salt?: number;
-  salt_100g?: number;
-  salt_serving?: number;
-  salt_unit?: string;
-  salt_value?: number;
-  "saturated-fat"?: number;
-  "saturated-fat_100g"?: number;
-  "saturated-fat_serving"?: number;
-  "saturated-fat_unit"?: string;
-  "saturated-fat_value"?: number;
-  sodium?: number;
-  sodium_100g?: number;
-  sodium_serving?: number;
-  sodium_unit?: string;
-  sodium_value?: number;
-  sugars?: number;
-  sugars_100g?: number;
-  sugars_serving?: number;
-  sugars_unit?: string;
-  sugars_value?: number;
-  "trans-fat"?: number;
-  "trans-fat_100g"?: number;
-  "trans-fat_serving"?: number;
-  "trans-fat_unit"?: string;
-  "trans-fat_value"?: number;
-  "vitamin-a"?: number;
-  "vitamin-a_100g"?: number;
-  "vitamin-a_serving"?: number;
-  "vitamin-a_unit"?: string;
-  "vitamin-a_value"?: number;
-  "vitamin-c"?: number;
-  "vitamin-c_100g"?: number;
-  "vitamin-c_serving"?: number;
-  "vitamin-c_unit"?: string;
-  "vitamin-c_value"?: number;
+export interface NutritionDataProps {
+  data: {
+    calcium?: number | null;
+    calcium_100g?: number | null;
+    calcium_serving?: number | null;
+    calcium_unit?: string | null;
+    calcium_value?: number | null;
+    carbohydrates?: number | null;
+    carbohydrates_100g?: number | null;
+    carbohydrates_serving?: number | null;
+    carbohydrates_unit?: string | null;
+    carbohydrates_value?: number | null;
+    cholesterol?: number | null;
+    cholesterol_100g?: number | null;
+    cholesterol_serving?: number | null;
+    cholesterol_unit?: string | null;
+    cholesterol_value?: number | null;
+    energy?: number | null;
+    "energy-kcal"?: number | null;
+    "energy-kcal_100g"?: number | null;
+    "energy-kcal_serving"?: number | null;
+    "energy-kcal_unit"?: string | null;
+    "energy-kcal_value"?: number | null;
+    "energy-kcal_value_computed"?: number | null;
+    energy_100g?: number | null;
+    energy_serving?: number | null;
+    energy_unit?: string | null;
+    energy_value?: number | null;
+    fat?: number | null;
+    fat_100g?: number | null;
+    fat_serving?: number | null;
+    fat_unit?: string | null;
+    fat_value?: number | null;
+    fiber?: number | null;
+    fiber_100g?: number | null;
+    fiber_serving?: number | null;
+    fiber_unit?: string | null;
+    fiber_value?: number | null;
+    "fruits-vegetables-legumes-estimate-from-ingredients_100g"?: number | null;
+    "fruits-vegetables-legumes-estimate-from-ingredients_serving"?:
+      | number
+      | null;
+    "fruits-vegetables-nuts-estimate-from-ingredients_100g"?: number | null;
+    "fruits-vegetables-nuts-estimate-from-ingredients_serving"?: number | null;
+    iron?: number | null;
+    iron_100g?: number | null;
+    iron_serving?: number | null;
+    iron_unit?: string | null;
+    iron_value?: number | null;
+    "nova-group"?: number | null;
+    "nova-group_100g"?: number | null;
+    "nova-group_serving"?: number | null;
+    "nutrition-score-fr"?: number | null;
+    "nutrition-score-fr_100g"?: number | null;
+    proteins?: number | null;
+    proteins_100g?: number | null;
+    proteins_serving?: number | null;
+    proteins_unit?: string | null;
+    proteins_value?: number | null;
+    salt?: number | null;
+    salt_100g?: number | null;
+    salt_serving?: number | null;
+    salt_unit?: string | null;
+    salt_value?: number | null;
+    "saturated-fat"?: number | null;
+    "saturated-fat_100g"?: number | null;
+    "saturated-fat_serving"?: number | null;
+    "saturated-fat_unit"?: string | null;
+    "saturated-fat_value"?: number | null;
+    sodium?: number | null;
+    sodium_100g?: number | null;
+    sodium_serving?: number | null;
+    sodium_unit?: string | null;
+    sodium_value?: number | null;
+    sugars?: number | null;
+    sugars_100g?: number | null;
+    sugars_serving?: number | null;
+    sugars_unit?: string | null;
+    sugars_value?: number | null;
+    "trans-fat"?: number | null;
+    "trans-fat_100g"?: number | null;
+    "trans-fat_serving"?: number | null;
+    "trans-fat_unit"?: string | null;
+    "trans-fat_value"?: number | null;
+    "vitamin-a"?: number | null;
+    "vitamin-a_100g"?: number | null;
+    "vitamin-a_serving"?: number | null;
+    "vitamin-a_unit"?: string | null;
+    "vitamin-a_value"?: number | null;
+    "vitamin-c"?: number | null;
+    "vitamin-c_100g"?: number | null;
+    "vitamin-c_serving"?: number | null;
+    "vitamin-c_unit"?: string | null;
+    "vitamin-c_value"?: number | null;
+  } | null;
 }
 
 // import data.nutriments from "../assets/data.nutriments.json";
@@ -117,99 +121,105 @@ const NutrimentsComponent: React.FC<NutritionDataProps> = React.memo(
         <Text style={styles.infoText}>
           <Text style={styles.subInfoText}>Calcium:</Text>{" "}
           <Text style={styles.details}>
-            {data.calcium || "0"} {""} {data.calcium_unit}
+            {data?.calcium || "0"} {""} {data?.calcium_unit}
           </Text>
         </Text>
         <Text style={styles.infoText}>
           <Text style={styles.subInfoText}>Carbohydrates:</Text> {""}
           <Text style={styles.details}>
-            {data.carbohydrates || "0"}
-            {data.carbohydrates_unit}
+            {data?.carbohydrates || "0"}
+            {data?.carbohydrates_unit}
           </Text>
         </Text>
         <Text style={styles.infoText}>
           <Text style={styles.subInfoText}>Cholesterol:</Text> {""}
           {""}
           <Text style={styles.details}>
-            {data.cholesterol || "0"}
-            {data.cholesterol}
+            {data?.cholesterol || "0"}
+            {data?.cholesterol}
           </Text>
         </Text>
         <Text style={styles.infoText}>
           <Text style={styles.subInfoText}>Energy-kcal:</Text> {""}
           <Text style={styles.details}>
-            {data["energy-kcal"] || "Energy Not Available"}
-            {data["energy-kcal_unit"]}
+            {data
+              ? data["energy-kcal"] || "Energy Not Available"
+              : "Data not available"}
+            {data ? data["energy-kcal_unit"] : " Data not available"}
           </Text>
         </Text>
         <Text style={styles.infoText}>
           <Text style={styles.subInfoText}>Fat:</Text> {""}
           <Text style={styles.details}>
-            {data.fat || "0"}
-            {data.fat_unit}
+            {data?.fat || "0"}
+            {data?.fat_unit}
           </Text>
         </Text>
         <Text style={styles.infoText}>
           <Text style={styles.subInfoText}>Fiber:</Text> {""}
           <Text style={styles.details}>
-            {data.fiber || "0"}
-            {data.fiber_unit}
+            {data?.fiber || "0"}
+            {data?.fiber_unit}
           </Text>
         </Text>
         <Text style={styles.infoText}>
           <Text style={styles.subInfoText}>Iron:</Text> {""}
           <Text style={styles.details}>
-            {data.iron || "0"}
-            {data.iron_unit}
+            {data?.iron || "0"}
+            {data?.iron_unit}
           </Text>
         </Text>
         <Text style={styles.infoText}>
           <Text style={styles.subInfoText}>Proteins:</Text> {""}
           <Text style={styles.details}>
-            {data.proteins || "0"}
-            {data.proteins_unit}
+            {data?.proteins || "0"}
+            {data?.proteins_unit}
           </Text>
         </Text>
         <Text style={styles.infoText}>
           <Text style={styles.subInfoText}>Salt:</Text> {""}
           <Text style={styles.details}>
-            {data.salt || "0"}
-            {data.salt_unit}
+            {data?.salt || "0"}
+            {data?.salt_unit}
           </Text>
         </Text>
         <Text style={styles.infoText}>
           <Text style={styles.subInfoText}>Satured Fat:</Text>{" "}
           <Text style={styles.details}>
-            {data["saturated-fat"] || "no satured fat"}
-            {data["saturated-fat_unit"]}
+            {data
+              ? data["saturated-fat"] || "no satured fat"
+              : "Data not available"}
+            {data ? data["saturated-fat_unit"] : " Data not available"}
           </Text>
         </Text>
         <Text style={styles.infoText}>
           <Text style={styles.subInfoText}>Sodium:</Text>{" "}
           <Text style={styles.details}>
-            {data.sodium || "no sodium"}
-            {data.sodium_unit}
+            {data?.sodium || "no sodium"}
+            {data?.sodium_unit}
           </Text>
         </Text>
         <Text style={styles.infoText}>
           <Text style={styles.subInfoText}>Sugars:</Text>{" "}
           <Text style={styles.details}>
-            {data.sugars || "0"}
-            {data.sugars_unit}
+            {data?.sugars || "0"}
+            {data?.sugars_unit}
           </Text>
         </Text>
         <Text style={styles.infoText}>
           <Text style={styles.subInfoText}>Trans Fat:</Text>{" "}
           <Text style={styles.details}>
-            {data["trans-fat"] || "no trans fat"}
-            {data["trans-fat_unit"]}
+            {data ? data["trans-fat"] || "no trans fat" : " Data not available"}
+            {data ? data["trans-fat_unit"] : " Data not available"}
           </Text>
         </Text>
         <Text style={styles.infoText}>
           <Text style={styles.subInfoText}>Vitamin A:</Text>{" "}
           <Text style={styles.details}>
-            {data["vitamin-a"] || "vitamin a Not Available"}{" "}
-            {data["vitamin-a_unit"]}{" "}
+            {data
+              ? data["vitamin-a"] || "vitamin a Not Available"
+              : "Data not available"}{" "}
+            {data ? data["vitamin-a_unit"] : "Data not available"}{" "}
           </Text>
         </Text>
       </View>

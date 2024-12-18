@@ -13,7 +13,9 @@ import { useNavigation } from "@react-navigation/native";
 import { useLocalSearchParams } from "expo-router";
 import { fetchProductOpenFoodInfo } from "../../api/productApi";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
-import NutrimentsComponent from "@/components/NutrimentsComponent";
+import NutrimentsComponent, {
+  NutritionDataProps,
+} from "@/components/NutrimentsComponent";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import SimpleLineIcons from "@expo/vector-icons/SimpleLineIcons";
@@ -24,36 +26,27 @@ import FAOInput from "@/components/FAOInput";
 import { Provider as PaperProvider } from "react-native-paper";
 
 interface ProductInfo {
-  title: string;
-  brand: string;
-  description: string;
-  product_name: string;
-  generic_name: string;
-  brands: string;
-  categories: string;
-  ingredients_text: string;
-  quantity: string;
-  packaging: string;
+  title: string | null;
+  brand: string | null;
+  description: string | null;
+  product_name: string | null;
+  generic_name: string | null;
+  brands: string | null;
+  categories: string | null;
+  ingredients_text: string | null;
+  quantity: string | null;
+  packaging: string | null;
   image_url: string;
-  categories_tags: string;
-  nutriments: {
-    energy: string;
-    fat: string;
-    saturated_fat: string;
-    sugars: string;
-    salt: string;
-    sodium: string;
-    fiber: string;
-    proteins: string;
-  };
-  ecoscore_data: any;
-  nutriscore: any;
-  agribalyse: any;
-  warning: string;
-  labels: string;
-  manufacturing_places: string;
-  countries: string;
-  subName: string;
+  categories_tags: string | null;
+  nutriments: NutritionDataProps["data"] | null;
+  ecoscore_data: any | null;
+  nutriscore: any | null;
+  agribalyse: any | null;
+  warning: string | null;
+  labels: string | null;
+  manufacturing_places: string | null;
+  countries: string | null;
+  subName: string | null;
   // Add any other fields you're interested in
 }
 
