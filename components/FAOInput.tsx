@@ -1,10 +1,5 @@
 import React from "react";
-import {
-  View,
-  Text,
-  TouchableOpacity,
-  StyleSheet,
-} from "react-native";
+import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import { Picker } from "@react-native-picker/picker"; // Ensure you have this library installed
 
 export interface selectedFaoProps {
@@ -48,6 +43,7 @@ const FaoInput = React.memo(
       {
         label: "FAO 27",
         value: "area27",
+        area: "FAO_27",
         lonRange: { min: -25, max: 40 },
         latRange: { min: 35, max: 72 },
         nameDataFile: "CMEMS_NortheastAtlantic_bgc",
@@ -55,6 +51,7 @@ const FaoInput = React.memo(
       },
       {
         label: "FAO 31",
+        area: "FAO_31",
         value: "area31",
         lonRange: { min: -100, max: -45 },
         latRange: { min: 10, max: 35 },
@@ -185,7 +182,7 @@ const FaoInput = React.memo(
 
     const handleFaoChange = (value: string) => {
       const parsedValue = JSON.parse(value);
-      console.log(parsedValue);
+      console.log(parsedValue); //
       setSelectedFao(parsedValue);
     };
 

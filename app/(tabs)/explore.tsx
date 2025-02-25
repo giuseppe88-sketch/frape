@@ -184,27 +184,29 @@ export default function ProductInfoScreen() {
   };
 
   const BASE_URL =
-    "https://6af9-2a00-20-604e-2f8a-e9e1-b03f-95c5-22b6.ngrok-free.app/";
-  // const BASE_URL = "http://172.20.10.2:5000/";
+    // "https://frape-be-giuseppe88sketchs-projects.vercel.app/";
+    "https://cc32-2a00-20-6011-7579-b5b2-31cf-e76f-bea1.ngrok-free.app/";
   const fetchData = async (faoDetails: any) => {
     setIsLoadingFao(true);
     setCatchLocation(faoDetails.location);
+    console.log(faoDetails.area);
     try {
-      const response = await fetch(`${BASE_URL}fetch-data`, {
+      const response = await fetch(`${BASE_URL}fetch-data/`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          minDepth: 0.493,
-          maxDepth: 5727.918,
-          minLat: faoDetails.latRange.min,
-          maxLat: faoDetails.latRange.max,
-          minLon: faoDetails.lonRange.min,
-          maxLon: faoDetails.lonRange.max,
-          startDatetime: formattedStartDate, // Use dynamically calculated start date
-          endDatetime: formattedEndDate, // Use today's date for end date
-          output_filename: faoDetails.nameDataFile,
+          faoArea: faoDetails.area,
+          // minDepth: 0.493,
+          // maxDepth: 5727.918,
+          // minLat: faoDetails.latRange.min,
+          // maxLat: faoDetails.latRange.max,
+          // minLon: faoDetails.lonRange.min,
+          // maxLon: faoDetails.lonRange.max,
+          // startDatetime: formattedStartDate, // Use dynamically calculated start date
+          // endDatetime: formattedEndDate, // Use today's date for end date
+          // output_filename: faoDetails.nameDataFile,
         }),
       });
       if (!response.ok) {
