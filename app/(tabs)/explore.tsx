@@ -53,7 +53,6 @@ interface ProductInfo {
 export interface faoResultProps {
   pollutionEvents: number;
 }
-
 const today = new Date();
 const startDate = new Date(today);
 startDate.setMonth(today.getMonth() - 3); // Subtract 3 months from today
@@ -183,13 +182,13 @@ export default function ProductInfoScreen() {
     }
   };
 
-  const BASE_URL =
+  const BASE_URL = "https://b2089b69383e.ngrok-free.app/";
     // "https://frape-be-giuseppe88sketchs-projects.vercel.app/";
-    "https://cc32-2a00-20-6011-7579-b5b2-31cf-e76f-bea1.ngrok-free.app/";
+    // "https://cc32-2a00-20-6011-7579-b5b2-31cf-e76f-bea1.ngrok-free.app/"; //TODO: remove this once we have the right version of the backend service
   const fetchData = async (faoDetails: any) => {
     setIsLoadingFao(true);
     setCatchLocation(faoDetails.location);
-    console.log(faoDetails.area);
+    console.log("faoDetails.area", faoDetails.area);
     try {
       const response = await fetch(`${BASE_URL}fetch-data/`, {
         method: "POST",
@@ -197,16 +196,7 @@ export default function ProductInfoScreen() {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          faoArea: faoDetails.area,
-          // minDepth: 0.493,
-          // maxDepth: 5727.918,
-          // minLat: faoDetails.latRange.min,
-          // maxLat: faoDetails.latRange.max,
-          // minLon: faoDetails.lonRange.min,
-          // maxLon: faoDetails.lonRange.max,
-          // startDatetime: formattedStartDate, // Use dynamically calculated start date
-          // endDatetime: formattedEndDate, // Use today's date for end date
-          // output_filename: faoDetails.nameDataFile,
+         faoArea: faoDetails.area,
         }),
       });
       if (!response.ok) {
@@ -261,9 +251,7 @@ export default function ProductInfoScreen() {
         return null; // or a default placeholder image
     }
   };
-  // if (error) {
-  //   return <Text style={styles.errorText}>Error: {error}</Text>;
-  // }
+
 
   const isSeafood = (categories: any) => {
     if (categories && categories.includes("en:seafood")) {

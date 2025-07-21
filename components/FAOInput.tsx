@@ -182,7 +182,7 @@ const FaoInput = React.memo(
 
     const handleFaoChange = (value: string) => {
       const parsedValue = JSON.parse(value);
-      console.log(parsedValue); //
+      console.log("parsedValue", parsedValue); //
       setSelectedFao(parsedValue);
     };
 
