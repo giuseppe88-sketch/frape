@@ -1,50 +1,102 @@
-# Welcome to your Expo app 👋
+# FRAPE - Food Recognition and Pollution Evaluation
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+A React Native mobile application that combines food product analysis with environmental impact assessment, specifically focusing on seafood pollution data from FAO (Food and Agriculture Organization) fishing areas.
 
-## Get started
+## What FRAPE Does
 
-1. Install dependencies
+FRAPE is an innovative mobile app that helps users make informed decisions about food products by providing:
 
-   ```bash
-   npm install
-   ```
+### Core Features
 
-2. Start the app
+#### 1. Product Scanning & Recognition
+- Barcode Scanner: Scan product barcodes using your device camera
+- Product Information: Get detailed information about food products
+- Nutritional Analysis: View comprehensive nutrition data including calories, fats, proteins, vitamins, and minerals
 
-   ```bash
-    npx expo start
-   ```
+#### 2. Food Quality Assessment
+- Nutri-Score: Visual representation of nutritional quality (A-E rating)
+- Eco-Score: Environmental impact assessment of products
+- Ingredients Analysis: Detailed breakdown of product ingredients
+- Quality Indicators: Brand information, categories, manufacturing details
 
-In the output, you'll find options to open the app in a
+#### 3. Seafood Pollution Monitoring
+- FAO Area Selection: Choose from 19 different FAO fishing zones worldwide
+- Pollution Data: Real-time pollution events data for selected fishing areas
+- Environmental Impact: Understand the environmental conditions of seafood origins
+- Water Quality Assessment: Get insights into water quality levels in fishing zones
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+### Specialized Seafood Features
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+For seafood products, FRAPE provides additional environmental context:
 
-## Get a fresh project
+- FAO Fishing Areas: Comprehensive database of major fishing zones 
+- Pollution Monitoring: Integration with CMEMS (Copernicus Marine Environment Monitoring Service) for real-time environmental data
 
-When you're ready, run:
+- Location-Based Insights: Understand where your seafood comes from and the environmental conditions of those areas
 
-```bash
-npm run reset-project
+## App Architecture
+
+### Organized Codebase
+```
+/components/     # Reusable UI components
+/types/          # Centralized TypeScript interfaces
+/utils/          # Helper functions and utilities
+/api/            # API integration modules
+/data/           # Static data and configurations
+/app/(tabs)/     # Main application screens
 ```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+### Technology Stack
+- React Native: Cross-platform mobile development
+- TypeScript: Type-safe development
+- Expo: Development and deployment platform
+- React Native Paper: UI component library
+- External APIs: Integration with food databases and environmental monitoring services
 
-## Learn more
+## User Experience
 
-To learn more about developing your project with Expo, look at the following resources:
+### Intuitive Interface
+- Tab Navigation: Easy switching between scanning and exploration features
+- Visual Indicators: Clear icons and color-coded information
+- Responsive Design: Optimized for various screen sizes
+- Loading States: Smooth user experience with proper loading indicators
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+### Information Hierarchy
+- Product Overview: Brand, name, and basic information
+- Nutritional Details: Comprehensive nutrition breakdown
+- Environmental Impact: Eco-scores and sustainability metrics
+- Seafood Specifics: FAO area data and pollution information (when applicable)
 
-## Join the community
+## Environmental Impact
 
-Join our community of developers creating universal apps.
+FRAPE goes beyond traditional food apps by incorporating environmental consciousness:
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+- Sustainability Awareness: Help users understand the environmental impact of their food choices
+- Ocean Health: Provide insights into marine pollution affecting seafood quality
+- Informed Decisions: Enable users to make environmentally responsible food purchases
+
+## Data Sources
+
+- Food Product Database: Comprehensive product information and nutritional data
+- FAO Fishing Areas: Official Food and Agriculture Organization fishing zone classifications
+- CMEMS Data: Copernicus Marine Environment Monitoring Service for pollution tracking
+- Nutri-Score System: European nutritional quality rating system
+- Eco-Score System: Environmental impact assessment framework
+
+---
+
+## Getting Started
+
+*Setup instructions will be added soon*
+
+## License
+
+*License information to be added*
+
+## Contributing
+
+*Contribution guidelines to be added*
+
+---
+
+**FRAPE** - Making food choices that are good for you and the planet! 

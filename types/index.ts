@@ -128,3 +128,13 @@ export interface NutritionDataProps {
     "vitamin-c_value"?: number | null;
   } | null;
 }
+
+export interface SelectedFaoProps {
+  label: string;
+  value: string;
+  area?: string;
+  latRange: { min: number; max: number };
+  lonRange: { min: number; max: number };
+  nameDataFile: string;
+  location: string;
+}
