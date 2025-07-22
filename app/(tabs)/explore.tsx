@@ -12,6 +12,7 @@ import { useNavigation } from "@react-navigation/native";
 
 import { useLocalSearchParams } from "expo-router";
 import { fetchProductOpenFoodInfo } from "../../api/productApi";
+import { fetchFaoPollutionData } from "../../api/faoApi";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import NutrimentsComponent, {
   NutritionDataProps,
@@ -24,35 +25,15 @@ import Fontisto from "@expo/vector-icons/Fontisto";
 import Entypo from "@expo/vector-icons/Entypo";
 import FAOInput from "@/components/FAOInput";
 import { Provider as PaperProvider } from "react-native-paper";
+import { ProductInfo, faoResultProps, FaoDetails } from "@/types/index";
+import {
+  mapEcoScores,
+  mapEcoValue,
+  mapNutriScore,
+  isSeafood,
+} from "@/utils/productHelpers";
+import { mapNutriScoreIcon, mapWaterQuality } from "@/utils/componentHelpers";
 
-interface ProductInfo {
-  title: string | null;
-  brand: string | null;
-  description: string | null;
-  product_name: string | null;
-  generic_name: string | null;
-  brands: string | null;
-  categories: string | null;
-  ingredients_text: string | null;
-  quantity: string | null;
-  packaging: string | null;
-  image_url: string;
-  categories_tags: string | null;
-  nutriments: NutritionDataProps["data"] | null;
-  ecoscore_data: any | null;
-  nutriscore: any | null;
-  agribalyse: any | null;
-  warning: string | null;
-  labels: string | null;
-  manufacturing_places: string | null;
-  countries: string | null;
-  subName: string | null;
-  // Add any other fields you're interested in
-}
-
-export interface faoResultProps {
-  pollutionEvents: number;
-}
 const today = new Date();
 const startDate = new Date(today);
 startDate.setMonth(today.getMonth() - 3); // Subtract 3 months from today
@@ -74,64 +55,22 @@ export default function ProductInfoScreen() {
   const [faoResult, setFaoResult] = React.useState<faoResultProps | null>(null);
   const [catchLocation, setCatchLocation] = React.useState<string>("");
 
-  function mapEcoScores(data: any) {
-    let ecoscoreData = Object.entries(
-      data.ecoscore_data.adjustments.origins_of_ingredients
-    );
-    const epiScoreEntry = ecoscoreData.find(
-      (entry) => entry[0] === "epi_score"
-    );
-    if (epiScoreEntry) {
-      return `${epiScoreEntry[1]}/100`;
-    } else {
-      return "No EPI score found.";
+  const handleFaoSelect = async (selectedFao: any) => {
+    setIsLoadingFao(true);
+    setCatchLocation(selectedFao.location);
+    try {
+      const response = await fetchFaoPollutionData(selectedFao.area);
+    
+
+      const data = await response;
+      console.log("Response:", data);
+      setIsLoadingFao(false);
+      setFaoResult(data);
+      return data;
+    } catch (error) {
+      console.error("Error fetching data:", error);
     }
-  }
-  function mapEcoValue(data: any) {
-    let ecoscoreData = Object.entries(
-      data.ecoscore_data.adjustments.origins_of_ingredients
-    );
-    const epiScoreEntry = ecoscoreData.find(
-      (entry) => entry[0] === "epi_value"
-    );
-    if (epiScoreEntry) {
-      return `${epiScoreEntry[1]}/100`;
-    } else {
-      return "No EPI value found.";
-    }
-  }
-
-  const mapWaterQuality = React.useCallback(
-    (inputResultPollution: any) => {
-      if (inputResultPollution == null) return "";
-
-      let pollutionQuality: string;
-
-      if (inputResultPollution >= 0 && inputResultPollution <= 50) {
-        pollutionQuality = "Low";
-      } else if (inputResultPollution > 50 && inputResultPollution <= 200) {
-        pollutionQuality = "Moderate";
-      } else if (inputResultPollution > 200) {
-        pollutionQuality = "High";
-      } else if (isLoadingFao) {
-        pollutionQuality = "Loading";
-      } else {
-        pollutionQuality = ""; // Fallback case
-      }
-
-      switch (pollutionQuality) {
-        case "High":
-          return <Text style={styles.details}>BAD</Text>;
-        case "Moderate":
-          return <Text style={styles.details}>MODERATE</Text>;
-        case "Low":
-          return <Text style={styles.details}>GOOD</Text>;
-        default:
-          return <Text style={styles.details}>UNKNOWN</Text>;
-      }
-    },
-    [faoResult]
-  );
+  };
 
   React.useEffect(() => {
     const getProductInfo = async () => {
@@ -164,100 +103,6 @@ export default function ProductInfoScreen() {
       />
     );
   }
-
-  const mapNutriScore = (grade: string) => {
-    switch (grade.toLowerCase()) {
-      case "a":
-        return require("../../assets/a-nutri-score.png");
-      case "b":
-        return require("../../assets/a-nutri-score.png");
-      case "c":
-        return require("../../assets/a-nutri-score.png");
-      case "d":
-        return require("../../assets/a-nutri-score.png");
-      case "e":
-        return require("../../assets/a-nutri-score.png");
-      default:
-        return null; // or a default placeholder image
-    }
-  };
-
-  const BASE_URL = "https://b2089b69383e.ngrok-free.app/";
-    // "https://frape-be-giuseppe88sketchs-projects.vercel.app/";
-    // "https://cc32-2a00-20-6011-7579-b5b2-31cf-e76f-bea1.ngrok-free.app/"; //TODO: remove this once we have the right version of the backend service
-  const fetchData = async (faoDetails: any) => {
-    setIsLoadingFao(true);
-    setCatchLocation(faoDetails.location);
-    console.log("faoDetails.area", faoDetails.area);
-    try {
-      const response = await fetch(`${BASE_URL}fetch-data/`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-         faoArea: faoDetails.area,
-        }),
-      });
-      if (!response.ok) {
-        throw new Error(`HTTP error! Status: ${response.status}`);
-      }
-
-      const data = await response.json();
-      console.log("Response:", data);
-      setIsLoadingFao(false);
-      setFaoResult(data);
-      return data;
-    } catch (error) {
-      console.error("Error fetching data:", error);
-    }
-  };
-
-  const handleFaoSelect = (selectedFao: any) => {
-    fetchData(selectedFao)
-      .then((data) => {
-        if (data) {
-          console.log("Pollution Events:", data.pollutionEvents);
-        }
-      })
-      .catch((error) => {
-        console.error("Failed to fetch data:", error);
-      });
-  };
-
-  const mapNutriScoreIcon = (grade: string) => {
-    switch (grade.toLowerCase()) {
-      case "a":
-        return (
-          <Entypo name="emoji-happy" size={24} color="black" marginTop={5} />
-        );
-      case "b":
-        return (
-          <Entypo name="emoji-happy" size={24} color="black" marginTop={5} />
-        );
-      case "c":
-        return (
-          <Entypo name="emoji-neutral" size={24} color="black" marginTop={5} />
-        );
-      case "d":
-        return (
-          <Entypo name="emoji-sad" size={24} color="black" marginTop={5} />
-        );
-      case "e":
-        return (
-          <Entypo name="emoji-sad" size={24} color="black" marginTop={5} />
-        );
-      default:
-        return null; // or a default placeholder image
-    }
-  };
-
-
-  const isSeafood = (categories: any) => {
-    if (categories && categories.includes("en:seafood")) {
-      return true;
-    } else return false;
-  };
 
   return (
     <ScrollView style={styles.container}>
