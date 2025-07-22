@@ -29,11 +29,9 @@ export default function ProductInfoScreen() {
   const handleFaoSelect = async (selectedFao:any) => {
     setIsLoadingFao(true);
     setCatchLocation(selectedFao.location);
-    console.log("selectedFao", selectedFao.area);
     try {
       const response = await fetchFaoPollutionData(selectedFao.area);
       const data = await response;
-      console.log("Response:", data);
       setIsLoadingFao(false);
       setFaoResult(data);
     } catch (error) {

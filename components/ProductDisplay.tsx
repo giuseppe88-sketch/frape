@@ -132,7 +132,7 @@ export default function ProductDisplay({
         {isSeafood(dataProduct.categories_tags) && (
           <View>
             <View style={styles.titleContainer}>
-              <Fontisto name="fish" size={24} color="black" />
+              <Fontisto name="info" size={24} color="black" />
               <Text style={styles.sectionTitle}>Seafood Information</Text>
             </View>
             <Text style={styles.infoText}>

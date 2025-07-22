@@ -25,7 +25,6 @@ export async function fetchFaoPollutionData(
   faoDetails: FaoDetails
 ): Promise<faoResultProps> {
   try {
-    console.log("faoDetails.area", faoDetails.area);
 
     const response = await fetch(`${BASE_URL}fetch-data/`, {
       method: "POST",
@@ -42,7 +41,6 @@ export async function fetchFaoPollutionData(
     }
 
     const data = await response.json();
-    console.log("FAO API Response:", data);
 
     return data;
   } catch (error) {

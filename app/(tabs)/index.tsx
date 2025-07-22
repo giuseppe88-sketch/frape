@@ -21,8 +21,6 @@ export default function ScanScreen() {
     getCameraPermissions();
   }, []);
 
-  console.log("SCANNED",scanned)
-
   const handleBarcodeScanned = async ({ data }: dataGtinProps) => {
     setScanned(true);
     setData(data);
