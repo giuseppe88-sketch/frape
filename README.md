@@ -9,17 +9,20 @@ FRAPE is an innovative mobile app that helps users make informed decisions about
 ### Core Features
 
 #### 1. Product Scanning & Recognition
+
 - Barcode Scanner: Scan product barcodes using your device camera
 - Product Information: Get detailed information about food products
 - Nutritional Analysis: View comprehensive nutrition data including calories, fats, proteins, vitamins, and minerals
 
 #### 2. Food Quality Assessment
+
 - Nutri-Score: Visual representation of nutritional quality (A-E rating)
 - Eco-Score: Environmental impact assessment of products
 - Ingredients Analysis: Detailed breakdown of product ingredients
 - Quality Indicators: Brand information, categories, manufacturing details
 
 #### 3. Seafood Pollution Monitoring
+
 - FAO Area Selection: Choose from 19 different FAO fishing zones worldwide
 - Pollution Data: Real-time pollution events data for selected fishing areas
 - Environmental Impact: Understand the environmental conditions of seafood origins
@@ -29,7 +32,7 @@ FRAPE is an innovative mobile app that helps users make informed decisions about
 
 For seafood products, FRAPE provides additional environmental context:
 
-- FAO Fishing Areas: Comprehensive database of major fishing zones 
+- FAO Fishing Areas: Comprehensive database of major fishing zones
 - Pollution Monitoring: Integration with CMEMS (Copernicus Marine Environment Monitoring Service) for real-time environmental data
 
 - Location-Based Insights: Understand where your seafood comes from and the environmental conditions of those areas
@@ -37,6 +40,7 @@ For seafood products, FRAPE provides additional environmental context:
 ## App Architecture
 
 ### Organized Codebase
+
 ```
 /components/     # Reusable UI components
 /types/          # Centralized TypeScript interfaces
@@ -47,6 +51,7 @@ For seafood products, FRAPE provides additional environmental context:
 ```
 
 ### Technology Stack
+
 - React Native: Cross-platform mobile development
 - TypeScript: Type-safe development
 - Expo: Development and deployment platform
@@ -56,12 +61,14 @@ For seafood products, FRAPE provides additional environmental context:
 ## User Experience
 
 ### Intuitive Interface
+
 - Tab Navigation: Easy switching between scanning and exploration features
 - Visual Indicators: Clear icons and color-coded information
 - Responsive Design: Optimized for various screen sizes
 - Loading States: Smooth user experience with proper loading indicators
 
 ### Information Hierarchy
+
 - Product Overview: Brand, name, and basic information
 - Nutritional Details: Comprehensive nutrition breakdown
 - Environmental Impact: Eco-scores and sustainability metrics
@@ -87,16 +94,43 @@ FRAPE goes beyond traditional food apps by incorporating environmental conscious
 
 ## Getting Started
 
-*Setup instructions will be added soon*
+### 📱 Try FRAPE Now - Live Demo!
+
+**🚀 The app is live and ready to use!** Follow these simple steps to try FRAPE on your mobile device:
+
+#### Step 1: Install Expo Go
+
+- **iOS**: Download [Expo Go](https://apps.apple.com/app/expo-go/id982107779) from the App Store
+- **Android**: Download [Expo Go](https://play.google.com/store/apps/details?id=host.exp.exponent) from Google Play Store
+
+#### Step 2: Scan the QR Code
+
+**📱 Scan this QR code with Expo Go:**
+
+**🚀 Published App QR Code:**
+
+```
+https://qr.expo.dev/eas-update?projectId=a8005e98-86d5-44a2-8498-77179499e270&groupId=69a8dd5d-2812-4689-b09e-c83a0f8a97aa
+```
+
+> **For viewers:** Visit the URL above or scan the QR code it generates to access the live FRAPE app!
+
+**Alternative:** Visit the project page directly at [https://expo.dev/accounts/giuseppe88/projects/frape](https://expo.dev/accounts/giuseppe88/projects/frape)
+
+#### Step 3: Start Exploring! 🌊
+
+- **Scan barcodes** of food products using your camera
+- **Select FAO fishing areas** to get pollution data
+- **Explore** comprehensive product information with modern ocean-themed UI
 
 ## License
 
-*License information to be added*
+_License information to be added_
 
 ## Contributing
 
-*Contribution guidelines to be added*
+_Contribution guidelines to be added_
 
 ---
 
-**FRAPE** - Making food choices that are good for you and the planet! 
+**FRAPE** - Making food choices that are good for you and the planet!
