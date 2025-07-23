@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "frape",
-    "slug": "frape-ocean-product-scanner",
+    "slug": "frape",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/logo-splash.png",
