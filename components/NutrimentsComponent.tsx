@@ -7,8 +7,8 @@ import { NutritionDataProps } from "@/types/index";
 
 interface NutrientItemProps {
   label: string;
-  value: string | number | undefined;
-  unit?: string;
+  value: string | number | null | undefined;
+  unit?: string | null | undefined;
   icon: string;
   color: string;
 }
@@ -185,8 +185,8 @@ const NutrimentsComponent: React.FC<NutritionDataProps> = React.memo(
         {/* Footer Info */}
         <View style={styles.footerInfo}>
           <Text style={styles.footerText}>
-            Nutritional values may vary based on preparation methods and serving
-            sizes
+            💡 Nutritional values may vary based on preparation methods and
+            serving sizes
           </Text>
         </View>
       </View>

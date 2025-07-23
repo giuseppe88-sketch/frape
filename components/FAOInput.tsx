@@ -234,12 +234,12 @@ const styles = StyleSheet.create({
     overflow: "hidden",
   },
   picker: {
-    height: 50,
+    height: 70,
     width: "100%",
   },
   pickerItem: {
     fontSize: 16,
-    height: 50,
+    height: 70,
   },
 
   // Button styles

@@ -1,18 +1,18 @@
 {
   "expo": {
     "name": "frape",
-    "slug": "frape",
+    "slug": "frape-ocean-product-scanner",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/images/icon.png",
+    "icon": "./assets/logo-splash.png",
     "sdkVersion": "53.0.0",
     "scheme": "myapp",
     "newArchEnabled": true,
     "userInterfaceStyle": "automatic",
     "splash": {
-      "image": "./assets/images/icon.png",
+      "image": "./assets/logo-splash.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#0077be"
     },
     "ios": {
       "supportsTablet": true,
@@ -20,8 +20,8 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/images/icon.png",
-        "backgroundColor": "#ffffff"
+        "foregroundImage": "./assets/logo-splash.png",
+        "backgroundColor": "#0077be"
       },
       "permissions": [
         "android.permission.CAMERA",

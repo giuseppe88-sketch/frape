@@ -89,7 +89,7 @@ export default function ScanScreen() {
       >
         <StatusBar barStyle="light-content" />
         <View style={styles.permissionContent}>
-          <Ionicons name="camera-off-outline" size={80} color="white" />
+          <Ionicons name="camera-outline" size={80} color="white" />
           <Text style={styles.permissionText}>Camera Access Denied</Text>
           <Text style={styles.permissionSubtext}>
             Please enable camera permissions in settings

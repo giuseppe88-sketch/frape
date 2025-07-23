@@ -186,7 +186,9 @@ export default function ProductInfoScreen() {
             We couldn't find information for this product.
           </Text>
           <Text style={styles.errorDetails}>GTIN: {gtin}</Text>
-          <Text style={styles.errorMessage}>{error}</Text>
+          <Text style={styles.errorMessage}>
+            {error || "Unknown error occurred"}
+          </Text>
         </SafeAreaView>
       </LinearGradient>
     );
