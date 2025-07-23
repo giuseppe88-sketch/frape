@@ -3,10 +3,8 @@ import { faoResultProps } from "@/types/index";
 /**
  * FAO API configuration and endpoints
  */
-const BASE_URL = "https://b2089b69383e.ngrok-free.app/";
-// Alternative URLs for different environments:
-// "https://frape-be-giuseppe88sketchs-projects.vercel.app/";
-// "https://cc32-2a00-20-6011-7579-b5b2-31cf-e76f-bea1.ngrok-free.app/";
+const BASE_URL =
+  process.env.EXPO_PUBLIC_BASE_URL ;
 
 /**
  * Interface for FAO area details
@@ -24,8 +22,8 @@ export interface FaoDetails {
 export async function fetchFaoPollutionData(
   faoDetails: FaoDetails
 ): Promise<faoResultProps> {
+  console.log("faoDetails: ", faoDetails);
   try {
-
     const response = await fetch(`${BASE_URL}fetch-data/`, {
       method: "POST",
       headers: {
